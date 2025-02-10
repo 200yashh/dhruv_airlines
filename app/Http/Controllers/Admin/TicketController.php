@@ -6,8 +6,10 @@ use App\Models\Ticket;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Airline;
+use App\Models\Airport;
 use App\Models\City;
 use App\Models\Flight;
+use App\Models\Plane;
 use DataTables;
 use Illuminate\Http\Response;
 
@@ -151,15 +153,16 @@ class TicketController extends Controller
                 });
             return Datatables::of($data)->addIndexColumn()
                 ->setRowClass(fn ($row) => 'align-middle')
-                ->addColumn('action', function ($row) {
-                    // if user has already booked this flight, disable the button
-                    $booked = Ticket::where('user_id', auth()->user()->id)
-                        ->where('flight_id', $row->id)
-                        ->exists();
-                    if ($booked) {
-                        return '<button class="btn btn-success waves-effect waves-light">Booked</button>';
+                ->addColumn('action', function (Flight $Ticket) {
+
+                    $route = route("tickets.booking-page",$Ticket->id);
+                    if ($Ticket->remain_seats < 1) {
+                        return '<button class="btn btn-success waves-effect waves-light" disabled>Flight is full</button>';
                     }
-                    return '<button data-id="' . $row->id . '" type="button" class="btn btn-primary waves-effect waves-light  book-btn" >' . __('buttons.book_flight') . '</button>';;
+
+                    return '<a href="' . $route . '" class="btn btn-primary waves-effect waves-light" >' . __('buttons.book_flight') . '</a>';
+
+                    // return '<button data-id="' . $row->id . '" type="button" class="btn btn-primary waves-effect waves-light  book-btn" >' . __('buttons.book_flight') . '</button>';;
                 })
                 ->editColumn('flight_info', function ($row) {
                     $td = '<td>';
@@ -292,6 +295,41 @@ class TicketController extends Controller
         $airlines = Airline::pluck('name', 'id');
 
         return view('admin.tickets.user-tickets', compact('cities', 'airlines'));
+    }
+
+    public function showBookingPage($id = null)
+    {
+        // dd($id);
+        $flight = Flight::find($id);
+        // get all airlines that have planes
+        $airlines = Airline::whereHas("planes")->pluck('name', 'id');
+        $airports = Airport::all()->pluck('name', 'id');
+        $planes = Plane::all()->pluck('name', 'id');
+        return view('admin.booking.create' ,compact('airports', 'airlines', 'planes','flight'));
+    }
+
+    public function saveBookingPage(Request $request)
+    {
+        $noOfTicketes = (int) $request->number_of_tickets;
+        // dd($noOfTicketes);
+        // dd((int)$request->number_of_tickets);
+        $flight = Flight::find($request->flight_id);
+        if (!empty($flight)) {
+            
+            for ($i=0; $i < $noOfTicketes; $i++) { 
+                // create ticket
+                Ticket::create([
+                    'flight_id' => $request->flight_id,
+                    'user_id' => auth()->id(),
+                    'seat_number' => rand(1, 100),
+                ]);
+                
+                // reduce flight seat
+                $flight->decrement('remain_seats', 1);
+            }
+        }
+
+        return redirect()->route('tickets.flights');
     }
 
     public function book(Request $request)

@@ -31,6 +31,8 @@ Route::group(["prefix" => 'dashboard'], function () {
 
         //tickets
         Route::get('tickets/show-flights', [TicketController::class, 'showFlights'])->name('tickets.flights');
+        Route::get('tickets/booking-page/{id}', [TicketController::class, 'showBookingPage'])->name('tickets.booking-page');
+        Route::post('tickets/booking-save/', [TicketController::class, 'saveBookingPage'])->name('tickets.booking-save');
         Route::get('tickets/user-tickets', [TicketController::class, 'userTickets'])->name('tickets.userTickets');
         Route::post('tickets/book', [TicketController::class, 'book'])->name('tickets.book');
         Route::post('tickets/cancel-flight', [TicketController::class, 'cancel'])->name('tickets.cancel');
