@@ -55,7 +55,8 @@
                     @csrf
                     <div class="mb-3">
                       <label for="email" class="form-label">Email</label>
-                      <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', 'admin@airline.com') }}" id="email" placeholder="Enter Email" autocomplete="email" autofocus>
+                      {{-- admin@airline.com --}}
+                      <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', '') }}" id="email" placeholder="Enter Email" autocomplete="email" autofocus>
                       @error('email')
                         <span class="invalid-feedback" role="alert">
                           <strong>{{ $message }}</strong>
@@ -64,14 +65,14 @@
                     </div>
 
                     <div class="mb-3">
-                      <div class="float-end">
+                      {{-- <div class="float-end">
                         @if (Route::has('password.request'))
                           <a href="{{ route('password.request') }}" class="text-muted">Forgot password?</a>
                         @endif
-                      </div>
+                      </div> --}}
                       <label class="form-label">Password</label>
                       <div class="input-group auth-pass-inputgroup @error('password') is-invalid @enderror">
-                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="userpassword" value="password" placeholder="Enter password" aria-label="Password" aria-describedby="password-addon">
+                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="userpassword" placeholder="Enter password" aria-label="Password" aria-describedby="password-addon">
                         <button class="btn btn-light" type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
                         @error('password')
                           <span class="invalid-feedback" role="alert">

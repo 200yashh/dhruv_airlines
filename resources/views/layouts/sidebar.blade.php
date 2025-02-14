@@ -9,12 +9,12 @@
       <ul class="metismenu list-unstyled" id="side-menu">
 
         @admin
-          <li>
+          {{-- <li>
             <a href="{{ route('root') }}" class="waves-effect">
               <i class="bx bx-home-circle"></i>
               <span key="t-contact">@lang('sidebar.dashboard')</span>
             </a>
-          </li>
+          </li> --}}
 
           <li class="{{ request()->routeIs('airlines.*') ? 'mm-active' : '' }}">
             <a href="{{ route('airlines.index') }}" class="waves-effect">
@@ -45,7 +45,7 @@
           </li>
 
           {{-- tickets --}}
-          <li>
+          {{-- <li>
             <a href="javascript: void(0);" class="has-arrow waves-effect {{ request()->routeIs('tickets.*') ? 'mm-active' : '' }}">
               <i class="dripicons-ticket"></i>
               <span key="t-ecommerce">@lang('sidebar.tickets')</span>
@@ -72,14 +72,14 @@
                 </a>
               </li>
             </ul>
-          </li>
+          </li> --}}
 
-          <li class="{{ request()->routeIs('customers.*') ? 'mm-active' : '' }}">
+          {{-- <li class="{{ request()->routeIs('customers.*') ? 'mm-active' : '' }}">
             <a href="{{ route('customers.index') }}" class="waves-effect">
               <i class='bx bx-user'></i>
               <span key="t-contact">Customers</span>
             </a>
-          </li>
+          </li> --}}
         @else
           {{-- USER ROUTES  --}}
           <li>
@@ -89,7 +89,7 @@
             </a>
           </li>
 
-          <li>
+          {{-- <li>
             <a href="{{ route('tickets.flights') }}" class="waves-effect">
               <i class="bx bx-credit-card"></i>
               <span>@lang('sidebar.book_ticket')</span>
@@ -101,7 +101,7 @@
               <i class="bx bx-credit-card"></i>
               <span>@lang('sidebar.my_tickets')</span>
             </a>
-          </li>
+          </li> --}}
         @endadmin
 
       </ul>
